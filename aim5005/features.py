@@ -45,35 +45,44 @@ class StandardScaler:
         self.mean = None
         self.std = None
 
-    def fit(self, x: np.ndarray) -> None:
+    def _check_is_array(self, x: np.ndarray) -> np.ndarray:
+        """Check and convert input to a np.ndarray."""
+        if not isinstance(x, np.ndarray):
+            x = np.array(x)
+        assert isinstance(x, np.ndarray), "Expected the input to be a list"
+        return x
+
+    def fit(self, x) -> None:
         x = self._check_is_array(x)
         self.mean = x.mean(axis=0)
         self.std = x.std(axis=0)
 
-    def transform(self, x: np.ndarray) -> np.ndarray:
+    def transform(self, x) -> np.ndarray:
         x = self._check_is_array(x)
         return (x - self.mean) / self.std
 
-    def fit_transform(self, x: np.ndarray) -> np.ndarray:
+    def fit_transform(self, x) -> np.ndarray:
         self.fit(x)
         return self.transform(x)
+
 
 class LabelEncoder:
     def __init__(self):
         self.classes_ = None
         self.mapping = {}
 
-    def fit(self, y: List[str]) -> None:
+    def fit(self, y) -> None:
         """Fit the label encoder."""
-        self.classes_ = np.unique(y)
+        self.classes_ = list(dict.fromkeys(y))  # Maintain order
         self.mapping = {label: idx for idx, label in enumerate(self.classes_)}
 
-    def transform(self, y: List[str]) -> List[int]:
+    def transform(self, y) -> list:
         """Transform labels to normalized encoding."""
         return [self.mapping[label] for label in y]
 
-    def fit_transform(self, y: List[str]) -> List[int]:
+    def fit_transform(self, y) -> list:
         """Fit and transform labels in one call."""
         self.fit(y)
         return self.transform(y)
+
 
