@@ -62,6 +62,22 @@ class TestFeatures(TestCase):
         assert (result == expected).all(), "Scaler transform does not return expected values. Expect {}. Got: {}".format(expected.reshape(1,-1), result.reshape(1,-1))
 
     # TODO: Add a test of your own below this line
+
+    def test_label_encoder(self):
+        encoder = LabelEncoder()
+        labels = ['cat', 'dog', 'cat', 'bird']
+        encoder.fit(labels)
+        transformed = encoder.transform(labels)
+        expected = [0, 1, 0, 2]  # Assuming 'bird' = 2, 'cat' = 0, 'dog' = 1
+        assert transformed == expected, f"Expected {expected}, but got {transformed}"
+
+    def test_label_encoder_fit_transform(self):
+        encoder = LabelEncoder()
+        labels = ['cat', 'dog', 'bird']
+        transformed = encoder.fit_transform(labels)
+        expected = [0, 1, 2]
+        assert transformed == expected, f"Expected {expected}, but got {transformed}"
+
     
 if __name__ == '__main__':
     unittest.main()
