@@ -31,7 +31,7 @@ class MinMaxScaler:
         diff_max_min = self.maximum - self.minimum
         
         # TODO: There is a bug here... Look carefully! 
-        return x-self.minimum/(self.maximum-self.minimum)
+        return (x-self.minimum)/(self.maximum-self.minimum)
     
     def fit_transform(self, x:list) -> np.ndarray:
         x = self._check_is_array(x)
@@ -39,7 +39,41 @@ class MinMaxScaler:
         return self.transform(x)
     
     
+
 class StandardScaler:
     def __init__(self):
         self.mean = None
-        raise NotImplementedError
+        self.std = None
+
+    def fit(self, x: np.ndarray) -> None:
+        x = self._check_is_array(x)
+        self.mean = x.mean(axis=0)
+        self.std = x.std(axis=0)
+
+    def transform(self, x: np.ndarray) -> np.ndarray:
+        x = self._check_is_array(x)
+        return (x - self.mean) / self.std
+
+    def fit_transform(self, x: np.ndarray) -> np.ndarray:
+        self.fit(x)
+        return self.transform(x)
+
+class LabelEncoder:
+    def __init__(self):
+        self.classes_ = None
+        self.mapping = {}
+
+    def fit(self, y: List[str]) -> None:
+        """Fit the label encoder."""
+        self.classes_ = np.unique(y)
+        self.mapping = {label: idx for idx, label in enumerate(self.classes_)}
+
+    def transform(self, y: List[str]) -> List[int]:
+        """Transform labels to normalized encoding."""
+        return [self.mapping[label] for label in y]
+
+    def fit_transform(self, y: List[str]) -> List[int]:
+        """Fit and transform labels in one call."""
+        self.fit(y)
+        return self.transform(y)
+
