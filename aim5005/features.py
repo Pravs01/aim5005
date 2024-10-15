@@ -12,7 +12,7 @@ class MinMaxScaler:
         if not isinstance(x, np.ndarray):
             x = np.array(x)
             
-        assert isinstance(x, np.ndarray), 
+        assert isinstance(x, np.ndarray) 
         return x
         
     
@@ -45,7 +45,7 @@ class StandardScaler:
         
         if not isinstance(x, np.ndarray):
             x = np.array(x)
-        assert isinstance(x, np.ndarray), 
+        assert isinstance(x, np.ndarray)
         return x
 
     def fit(self, x) -> None:
